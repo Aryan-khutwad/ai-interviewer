@@ -17,6 +17,4 @@ services:
     staticPublishPath: frontend/build
     envVars:
       - key: REACT_APP_API_URL
-        fromService:
-          name: ai-interviewer-backend
-          property: url
+        value: https://ai-interviewer-backend.onrender.com
