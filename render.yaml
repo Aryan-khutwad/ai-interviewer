@@ -10,3 +10,12 @@ services:
         value: production
       - key: PYTHON_VERSION
         value: 3.12.10
+
+staticSites:
+  - name: ai-interviewer-frontend
+    branch: main
+    buildCommand: cd frontend && npm install && npm run build
+    publishPath: frontend/build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://ai-interviewer-backend.onrender.com
