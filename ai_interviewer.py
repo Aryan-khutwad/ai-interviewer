@@ -11,6 +11,8 @@ from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 import numpy as np
 from collections import defaultdict
+import ast
+
 
 class CodePracticeEnvironment:
     def __init__(self):
@@ -23,7 +25,7 @@ class CodePracticeEnvironment:
             },
             "cpp": {
                 "extension": ".cpp",
-                "run_command": ["g++", "{file}", "-o", "{executable}", "&&", "{executable}"]
+                "run_command": subprocess.run("g++ file.cpp -o out && ./out", shell=True)
             },
             "java": {
                 "extension": ".java",
@@ -247,7 +249,7 @@ class CodePracticeEnvironment:
             if "Error:" in output:
                 return None
             if self.current_language == "python":
-                return eval(output)
+                return ast.literal_eval(output)
             if self.current_language == "cpp":
                 return int(output)
             return int(output)
@@ -380,7 +382,8 @@ class ConfidenceTracker:
         plt.grid(True)
         
         # Save plot to temporary file
-        plot_path = tempfile.mktemp(suffix='.png')
+        fd, plot_path = tempfile.mkstemp(suffix=".png")
+        os.close(fd)
         plt.savefig(plot_path)
         plt.close()
         
@@ -479,20 +482,23 @@ class AIInterviewer:
                 return row
         return None
 
-    def _ensure_models(self) -> None:
-        """Load NLP models on first use (avoids slow server startup)."""
+    def _ensure_models(self):
         if self.nlp is None:
             try:
                 self.nlp = spacy.load("en_core_web_sm")
+            except OSError:
+                print("Downloading spaCy model...")
+                import subprocess
+                subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
+                self.nlp = spacy.load("en_core_web_sm")
             except Exception:
-                # spaCy model is optional; fallback to heuristics if missing.
                 self.nlp = None
+
         if self.sentiment_analyzer is None:
             try:
                 from transformers import pipeline
                 self.sentiment_analyzer = pipeline("sentiment-analysis")
             except Exception:
-                # If transformers/torch is misconfigured, keep the backend usable.
                 self.sentiment_analyzer = None
 
     def _try_groq_interview_update(
@@ -515,7 +521,7 @@ class AIInterviewer:
 
         # Key currently exists in this repo in `backend/name/utils/groq_helper.py`.
         # Keeping it here minimizes changes, but you should move to env var later.
-        api_key = "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"
+        api_key = os.environ.get("GROQ_API_KEY")
 
         try:
             client = Groq(api_key=api_key)
@@ -604,8 +610,7 @@ Return ONLY valid JSON in this exact schema (no markdown, no extra text):
         if not cp:
             return None
 
-        api_key = "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"
-
+        api_key = os.environ.get("GROQ_API_KEY")
         try:
             client = Groq(api_key=api_key)
             prob_block = "\n".join(
@@ -1045,4 +1050,4 @@ def find_second_largest(arr):
     
     # Get interview summary
     summary = interviewer.get_interview_summary()
-    print("\nInterview Summary:", summary) 
+    print("\nInterview Summary:", summary)
