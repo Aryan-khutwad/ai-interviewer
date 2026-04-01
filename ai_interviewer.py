@@ -25,7 +25,7 @@ class CodePracticeEnvironment:
             },
             "cpp": {
                 "extension": ".cpp",
-                "run_command": subprocess.run("g++ file.cpp -o out && ./out", shell=True)
+                "run_command": "g++ {file} -o out && ./out"
             },
             "java": {
                 "extension": ".java",
