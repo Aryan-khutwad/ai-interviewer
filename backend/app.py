@@ -14,6 +14,23 @@ CORS(app)
 # Initialize AI Interviewer
 interviewer = AIInterviewer()
 
+@app.route('/', methods=['GET'])
+def health():
+    """Health check endpoint."""
+    return jsonify({
+        "status": "AI Interviewer API is running",
+        "version": "1.0",
+        "endpoints": {
+            "start_interview": "/api/start-interview (POST)",
+            "analyze_response": "/api/analyze-response (POST)",
+            "start_code_practice": "/api/start-code-practice (POST)",
+            "get_hint": "/api/get-hint (GET)",
+            "submit_solution": "/api/submit-solution (POST)",
+            "confidence_dashboard": "/api/confidence-dashboard (GET)",
+            "interview_summary": "/api/interview-summary (GET)"
+        }
+    }), 200
+
 @app.route('/api/start-interview', methods=['POST'])
 def start_interview():
     """Start a new interview session."""

@@ -18,4 +18,4 @@ staticSites:
     publishPath: frontend/build
     envVars:
       - key: REACT_APP_API_URL
-        value: https://ai-interviewer-backend.onrender.com
+        value: https://ai-interviewer-backend-wg46.onrender.com
