@@ -3,7 +3,7 @@ services:
     name: ai-interviewer-backend
     env: python
     plan: free
-    buildCommand: pip install --upgrade pip setuptools wheel && pip install gunicorn && pip install -r backend/requirements.txt
+    buildCommand: pip install --upgrade pip setuptools wheel && pip install gunicorn && pip install -r backend/requirements.txt && python -m spacy download en_core_web_sm
     startCommand: cd backend && gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 60
     envVars:
       - key: FLASK_ENV

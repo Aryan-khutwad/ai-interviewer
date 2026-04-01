@@ -3,6 +3,10 @@ from flask_cors import CORS
 import json
 import os
 import sys
+from dotenv import load_dotenv
+
+# Load environment variables from .env
+load_dotenv()
 
 # Ensure `ai_interviewer.py` (one directory up from this file) is importable.
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))

@@ -521,7 +521,7 @@ class AIInterviewer:
 
         # Key currently exists in this repo in `backend/name/utils/groq_helper.py`.
         # Keeping it here minimizes changes, but you should move to env var later.
-        api_key = os.environ.get("GROQ_API_KEY")
+        api_key = os.environ.get("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")
 
         try:
             client = Groq(api_key=api_key)
