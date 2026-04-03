@@ -596,7 +596,10 @@ Return ONLY valid JSON in this exact schema (no markdown, no extra text):
                 return None
 
             return payload
-        except Exception:
+        except Exception as e:
+            print(f"[GROQ ERROR] Groq API call failed: {str(e)}")
+            import traceback
+            traceback.print_exc()
             return None
 
     def _try_groq_code_review(self, user_code: str, eval_result: Dict) -> Optional[Dict]:
@@ -665,7 +668,10 @@ Return ONLY valid JSON (no markdown) in this exact schema:
                 "code_feedback": str(payload["code_feedback"]),
                 "corrected_code": str(payload["corrected_code"]),
             }
-        except Exception:
+        except Exception as e:
+            print(f"[GROQ CODE REVIEW ERROR] Groq code review failed: {str(e)}")
+            import traceback
+            traceback.print_exc()
             return None
 
     def start_interview(self) -> str:
